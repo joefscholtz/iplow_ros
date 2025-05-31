@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="iplow">
+
+	<xacro:arg name="simulation" default="true"/>
+
+  <xacro:include filename="iplow_core.urdf.xacro"/>
+  <!-- <xacro:include filename="ros2_control.urdf.xacro"/> -->
+
+</robot>

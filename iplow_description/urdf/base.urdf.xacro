@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="inertial_macros.urdf.xacro"/>
+
+	<xacro:macro name="base" params="name parent *origin">
+
+    <joint name="${name}_joint" type="fixed">
+			<parent link="${parent}"/>
+			<child link="${name}"/>
+			<xacro:insert_block name="origin"/>
+			<axis xyz="0 0 1"/>
+		</joint>
+
+    <link name="${name}">
+			<visual>
+				<geometry>
+					<mesh filename="package://iplow_description/meshes/base.stl"/>
+				</geometry>
+			</visual>
+			<collision>
+				<geometry>
+					<mesh filename="package://iplow_description/meshes/base.stl"/>
+				</geometry>
+			</collision>
+      <xacro:inertial_box mass="5" x="0.17" y="0.17" z="0.17"/> <!-- TODO replace with real values -->
+		</link>
+
+	</xacro:macro>
+</robot>

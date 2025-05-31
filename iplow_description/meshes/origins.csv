@@ -1,0 +1,13 @@
+mesh,x,y,z
+body,2.812,120.11,378.4
+left_caster_base,-295.52,513.4,92.307
+left_caster_pivot,-297.81,522.53,63.209
+left_caster_wheel,-297.71,522.72,32.231
+left_motor,-217.51,22.264,135.07
+left_wheel,-316.27,63.166,155
+mid360,0,0,1343.9
+right_caster_base,295.87,532.1,79.838
+right_caster_pivot,297.92,534.23,68.157
+right_caster_wheel,297.89,522.72,32.231
+right_motor,217.44,22.264,135.07
+right_wheel,315.78,63.166,155
