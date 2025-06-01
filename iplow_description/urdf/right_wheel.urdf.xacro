@@ -5,7 +5,7 @@
 
 	<xacro:arg name="ignition" default="false"/>
 
-	<xacro:macro name="right_back_arm" params="name parent *origin">
+	<xacro:macro name="right_wheel" params="name parent *origin">
 
     <joint name="${name}_joint" type="continuous">
 			<parent link="${parent}"/>

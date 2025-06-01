@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="inertial_macros.urdf.xacro"/>
+
+	<xacro:arg name="ignition" default="false"/>
+
+	<xacro:macro name="mid360" params="name parent *origin">
+
+    <joint name="${name}_joint" type="fixed">
+			<parent link="${parent}"/>
+			<child link="${name}"/>
+      <xacro:insert_block name="origin"/>
+		</joint>
+
+    <link name="${name}">
+			<visual>
+				<geometry>
+					<mesh filename="package://iplow_description/meshes/mid360.stl"/>
+				</geometry>
+			</visual>
+			<collision>
+				<geometry>
+					<mesh filename="package://iplow_description/meshes/mid360.stl"/>
+				</geometry>
+			</collision>
+      <xacro:inertial_box mass="0.05" x="0.17" y="0.00625" z="0.8"/> <!-- TODO replace shoulder axis mass with real value -->
+		</link>
+
+	</xacro:macro>
+</robot>

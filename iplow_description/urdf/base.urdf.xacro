@@ -14,11 +14,13 @@
 
     <link name="${name}">
 			<visual>
+        <origin xyz="0 0.0569 0.0" rpy="0 0 0"/>
 				<geometry>
 					<mesh filename="package://iplow_description/meshes/base.stl"/>
 				</geometry>
 			</visual>
 			<collision>
+        <origin xyz="0 0.0569 0.0" rpy="0 0 0"/>
 				<geometry>
 					<mesh filename="package://iplow_description/meshes/base.stl"/>
 				</geometry>

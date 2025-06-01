@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="inertial_macros.urdf.xacro"/>
+
+	<xacro:arg name="ignition" default="false"/>
+
+	<xacro:macro name="right_caster" params="name parent *origin">
+
+    <joint name="${name}_joint" type="continuous">
+			<parent link="${parent}"/>
+			<child link="${name}_pivot"/>
+      <xacro:insert_block name="origin"/>
+			<axis xyz="0 0 1"/>
+		</joint>
+
+    <link name="${name}_pivot">
+			<visual>
+				<geometry>
+					<mesh filename="package://iplow_description/meshes/right_caster_pivot.stl"/>
+				</geometry>
+			</visual>
+			<collision>
+				<geometry>
+					<mesh filename="package://iplow_description/meshes/right_caster_pivot.stl"/>
+				</geometry>
+			</collision>
+      <xacro:inertial_box mass="0.05" x="0.17" y="0.00625" z="0.8"/> <!-- TODO replace shoulder axis mass with real value -->
+		</link>
+
+    <joint name="${name}_wheel_joint" type="continuous">
+			<parent link="${name}_pivot"/>
+			<child link="${name}_wheel"/>
+      <origin xyz="0.0 -0.0115 -0.0359" rpy="0 0 0"/> 
+			<axis xyz="1 0 0"/>
+		</joint>
+
+    <link name="${name}_wheel">
+			<visual>
+				<geometry>
+					<mesh filename="package://iplow_description/meshes/right_caster_wheel.stl"/>
+				</geometry>
+			</visual>
+			<collision>
+				<geometry>
+					<mesh filename="package://iplow_description/meshes/right_caster_wheel.stl"/>
+				</geometry>
+			</collision>
+      <xacro:inertial_box mass="0.05" x="0.17" y="0.00625" z="0.8"/> <!-- TODO replace shoulder axis mass with real value -->
+		</link>
+	</xacro:macro>
+</robot>
