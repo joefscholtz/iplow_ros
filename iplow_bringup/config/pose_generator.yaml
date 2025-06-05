@@ -1,0 +1,116 @@
+pose_generator_mode_0_matrix:
+  # [optional, default=0] pose_generator mode:
+  #   * 0: static pose
+  #   * 1: (rtmaps only) xyzRxRyRz input
+  #   * 2: (rtmaps only) xyzRzRyRx input
+  mode: 0
+  # [optional, default=1(hz)] (rtmaps only) Publish frequency
+  frequency: 1
+  # [optional] Node that describes static matrix initialization (mode 0)
+  pose:
+    # [optional, default=identity] 4x4 matrix (row major)
+    matrix:
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+      ]
+    # [optional, default=[0.0, 0.0, 0.0]] Offset added to the pose to handle
+    # large geographic coordinates
+    offset: [0.0, 0.0, 0.0]
+
+  # [optional] (ros only) ROS parameters
+  ros:
+    # [optional, default=/exwayz/pose_generator] output namespace, prepends
+    # all outputs.
+    namespace: /exwayz/pose_generator
+
+    # [optional] Output Odometry settings.
+    output_odometry:
+      # [optional, default=/odometry] Topic name
+      topic: /odometry
+      # [optional, default=xyz_map] Odometry message header.frame_id
+      parent_frame_id: xyz_map
+      # [optional, default=pose_generator] Odometry message child_frame_id
+      child_frame_id: pose_generator
+      # [optional, default=false] Optionally inverts output pose and
+      # frame_ids
+      invert: false
+
+pose_generator_mode_0_translation_euler:
+  mode: 0
+  frequency: 1
+  pose:
+    # [optional, default=[0.0, 0.0, 0.0]] Translation in meters
+    translation: [1.0, 2.0, 3.0]
+    # [optional, default=[0.0, 0.0, 0.0]] Euler angles [Rx, Ry, Rz] (roll,
+    # pitch yaw)
+    euler: [0.0, 0.0, 90.0]
+    # [optional, default=false] Interprete the angles in degrees
+    angles_degrees: true
+    offset: [0.0, 0.0, 0.0]
+
+  ros:
+    namespace: /exwayz/pose_generator
+
+    output_odometry:
+      topic: /odometry
+      parent_frame_id: xyz_map
+      child_frame_id: pose_generator
+      invert: false
+
+pose_generator_mode_0_translation_quaternion:
+  mode: 0
+  frequency: 1
+  pose:
+    translation: [1.0, 2.0, 3.0]
+    # [optional, default=[1.0, 0.0, 0.0, 0.0]] Orientation as quaternion
+    # interpreted in Hamiltonian convention (qw, qx, qy, qz)
+    quaternion: [1.0, 0.0, 0.0, 0.0]
+    offset: [0.0, 0.0, 0.0]
+
+  ros:
+    namespace: /exwayz/pose_generator
+
+    output_odometry:
+      topic: /odometry
+      parent_frame_id: xyz_map
+      child_frame_id: pose_generator
+      invert: false
+
+pose_generator_mode_0_file:
+  mode: 0
+  frequency: 1
+  pose:
+    # [optional] path to 4x4 matrix file.
+    path: static_init.txt
+    offset: [0.0, 0.0, 0.0]
+
+  ros:
+    namespace: /exwayz/pose_generator
+
+    output_odometry:
+      topic: /odometry
+      parent_frame_id: xyz_map
+      child_frame_id: pose_generator
+      invert: false
+
+# (rtmaps only) RTMaps parameters
+pose_generator_mode_1:
+  mode: 1
+  # [optional, default=false] In mode 1 and 2, by default angles are expected
+  # in radians.
+  angles_degrees: false

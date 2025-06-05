@@ -1,0 +1,66 @@
+relocalization:
+  min_num_init: 10
+  enable_motion_compensation: true
+
+  pre_process:
+    num_threads: 2
+
+    num_rows: 16
+    num_cols: 512
+    keep_strategy: farthest
+
+    range_min: 3.0
+    range_max: 250.0
+
+    center: [0.0, 0.0, 0.0]
+    size: [1.0, 1.0, 1.0]
+
+    grid_resolution: 0.20
+
+  local_mapping:
+    enable: false
+    min_num_fix: 50
+    map_local:
+      d_update: 0.1
+      d_prune: 120.0
+      normals_knn: 30
+      resolution: 0.1
+
+  icp_init:
+    num_threads: 2
+    num_iter: 5
+    d_max: 0.5
+
+  icp:
+    num_threads: 2
+    num_iter: 5
+    d_max: 0.2
+
+  init:
+    calib:
+      translation: [0.0, 0.0, 0.0]
+
+  map_static:
+    # Set the path to the .map map file
+    path: "/home/robot/exwayz_sample_map.map" # <--- Set accordingly
+    crs: EPSG:32632
+
+  checks:
+    min_overlap: 0.1
+    max_distance_to_map: 0.3
+    input_rejection_ratio: 0.7
+
+  output:
+    pc_mode: 2
+
+  ros:
+    namespace: /exwayz/relocalization
+
+    input_pointcloud2:
+      topic: /exwayz/lidar_decoder/pointcloud2 # <--- Set accordingly
+
+    input_odometry:
+      topic: /exwayz/gnss_to_pose/odometry # <--- Set accordingly
+
+    output_odometry_local:
+      publish_tf: true

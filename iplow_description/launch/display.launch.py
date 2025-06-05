@@ -30,12 +30,14 @@ def generate_launch_description():
         package="joint_state_publisher",
         executable="joint_state_publisher",
         condition=UnlessCondition(jsp_gui),
+        parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
     )
 
     joint_state_publisher_gui_node = Node(
         package="joint_state_publisher_gui",
         executable="joint_state_publisher_gui",
         condition=IfCondition(jsp_gui),
+        parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
     )
 
     rviz_node = Node(
