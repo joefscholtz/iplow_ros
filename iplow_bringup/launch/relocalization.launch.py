@@ -48,8 +48,8 @@ def generate_launch_description():
 
     pose_generator_node = Node(
         package="exwayz",
-        executable="pose_generator",
-        name="pose_generator",
+        executable="ros2_pose_generator",
+        name="ros2_pose_generator",
         parameters=[
             LaunchConfiguration("pose_generator_config"),
         ]

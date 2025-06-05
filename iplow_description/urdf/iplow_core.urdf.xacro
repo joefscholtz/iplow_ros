@@ -47,7 +47,7 @@
     <origin xyz="0.2951 0.471064 -0.3102" rpy="0 0 0"/> 
   </xacro:right_caster>
 
-  <xacro:mid360 name="mid360" parent="base">
+  <xacro:mid360 name="livox_frame" parent="base">
     <origin xyz="-0.002 -0.0632 0.9655" rpy="0 0 0"/> 
   </xacro:mid360>
 

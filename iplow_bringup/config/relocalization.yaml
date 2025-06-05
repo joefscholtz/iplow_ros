@@ -1,66 +1,182 @@
 relocalization:
-  min_num_init: 10
-  enable_motion_compensation: true
+  # Processing parameters
+  #--------------------------------------------------------------------------#
+  # Preprocessing applied to incoming data
+  pre_post_process:
+    num_threads: 4
 
-  pre_process:
-    num_threads: 2
-
-    num_rows: 16
+    # row - col subsampling
+    num_rows: 32
     num_cols: 512
     keep_strategy: farthest
 
-    range_min: 3.0
-    range_max: 250.0
+    # range filtering
+    range_min: 2.0
+    range_max: 150.0
 
+    # crop
     center: [0.0, 0.0, 0.0]
-    size: [1.0, 1.0, 1.0]
+    size: [5.0, 5.0, 5.0]
 
-    grid_resolution: 0.20
+    # grid subsampling
+    grid_resolution: 0.1
 
+  # ICP used for initialization parameters
+  icp_init:
+    num_threads: 4
+    num_iter: 10
+    d_max: 1.0
+    # Minimum number of successful consecutive initialization to switch to FIX mode
+    min_num_init: 20
+
+  # ICP used for localization
+  icp:
+    num_threads: 4
+    num_iter: 10
+    d_max: 0.2
+    enable_motion_compensation: true
+
+  # Local mapping feature
   local_mapping:
     enable: false
+    # Minimum nb of consecutive fix to have before start building the local map
     min_num_fix: 50
-    map_local:
-      d_update: 0.1
-      d_prune: 120.0
-      normals_knn: 30
-      resolution: 0.1
+    # Minimum distance since last map update to trigger a new update : the
+    # smaller, the more often the local map will be updated
+    d_update: 0.1
+    # All points further than d_prune from the sensor are cleared from the local map
+    d_prune: 120.0
+    # Number of neighbors used to compute map geometrical attributes
+    normals_knn: 30
+    # Loacal map resolution in m
+    resolution: 0.1
+    # Enable the removal of mobile objects for not adding them to the map
+    remove_mobile_objects: true
 
-  icp_init:
-    num_threads: 2
-    num_iter: 5
-    d_max: 0.5
+  # Map and initialization parameters
+  #--------------------------------------------------------------------------#
+  map:
+    path: /home/iplow/Map/basement/2025-03-04_basement_aligned_10cm.map
+    sha1: d4a8f30b4675361bca924bc95f301a2997fddf15 # optional SHA1 to check the map file specified in 'path' correspondance
+    crs: 32617 # <------------ Set the CRS of the map
 
-  icp:
-    num_threads: 2
-    num_iter: 5
-    d_max: 0.2
-
+  # optional calibration applied to init odometry input
   init:
+    # Optional CRS of the input, if it is in a different CRS than the map's
+    # crs_src:
+    # Optional destination CRS of the input. If left empty, it is automatically filled by the map["crs"] value
+    # crs_dst:
+    # Transformation applied to the initialization pose
     calib:
-      translation: [0.0, 0.0, 0.0]
+      # Optional path to a calibration file from the init pose to the LiDAR RF
+      # path:
+      # The pose can alternatively be provided as a 4x4 matrix directly in the YAML file
+      matrix:
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+        ]
 
-  map_static:
-    # Set the path to the .map map file
-    path: "/home/robot/exwayz_sample_map.map" # <--- Set accordingly
-    crs: EPSG:32632
+  # API specific I/O parameters
+  #--------------------------------------------------------------------------#
+  # ROS specific
+  ros:
+    input_topic_pointcloud2: /converted/lidar #livox/lidar
+    input_topic_init_odometry: /odometry
+    output_namespace: /exwayz/reloc
+    output_topic_odometry: /odometry
+    output_frameid: xyz_map
+    map_frameid_parent: true
+    publish_tf: true
+    remote_start: false
+    subscribe_queue_size: 10
 
+  # Checks to ensure relocalization sanity
+  #--------------------------------------------------------------------------#
   checks:
-    min_overlap: 0.1
-    max_distance_to_map: 0.3
+    # Minimum tolerated overlap to the map
+    min_overlap: 0.25
+    # Maximum tolereated distance to the map (averaged, in m)
+    max_distance_to_map: 0.1
+    # Used discard incoming frames that would have too few points (less than input_rejection_ratio * previous_frame)
     input_rejection_ratio: 0.7
 
+  # Output parameters
+  #--------------------------------------------------------------------------#
   output:
-    pc_mode: 2
+    # Output point cloud mode
+    # 0 : no output pointcloud
+    # 1 : process (subsampled) point cloud
+    # 2 : full frame
+    pc_mode: 1
 
+    pose:
+      # Destination CRS of the output pose. If commented, the output pose is in the CRS of the map
+      # crs_dst:
+      # Transformation applied to the output pose
+      calib:
+        # Optional path to a calibration file from the LiDAR RF pose to the desired output RF
+        # path:
+        # The calibration can alternatively be provided as a 4x4 matrix directly in the YAML file
+        matrix:
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+          ]
+
+previewer:
   ros:
-    namespace: /exwayz/relocalization
+    # Input PointCloud2 topic to display
+    input_topic_pointcloud2: /exwayz/reloc/pointcloud2
+    # input_topic_pointcloud2: /converted/lidar
+    # Input odometry topic to display
+    input_topic_odometry: /exwayz/reloc/odometry_local
+    # input_topic_odometry: /odom
+    # Optional path to a 3D model in OBJ format
+    # path_3d_model_obj:
+    # Minimum distance between two frames being added to the map in RViz
+    d_update_map: 0.5
+    # Subsampling resolution of each frame before it is added to the map.
+    # Set 0 for disabling subsampling
+    res_subsampling: 0.1
+    # Output namespace
+    output_namespace: /exwayz/previewer
 
-    input_pointcloud2:
-      topic: /exwayz/lidar_decoder/pointcloud2 # <--- Set accordingly
-
-    input_odometry:
-      topic: /exwayz/gnss_to_pose/odometry # <--- Set accordingly
-
-    output_odometry_local:
-      publish_tf: true
+map_sender:
+  ros:
+    # Input PointCloud2 topic to subscribe for triggering map sending
+    input_topic_pointcloud2: /exwayz/previewer/pointcloud2
+    # Path of the point cloud to display for visualization
+    path_map_for_visu: /home/iplow/Map/basement/2025-03-04_basement_aligned_10cm.ply
+    # Output namespace
+    output_namespace: /exwayz/map_sender
+    # Output frame id
+    output_frameid: xyz_map
