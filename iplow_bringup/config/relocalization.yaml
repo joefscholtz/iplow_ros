@@ -58,7 +58,7 @@ relocalization:
   map:
     path: /home/iplow/Map/basement/2025-03-04_basement_aligned_10cm.map
     sha1: d4a8f30b4675361bca924bc95f301a2997fddf15 # optional SHA1 to check the map file specified in 'path' correspondance
-    crs: 32617 # <------------ Set the CRS of the map
+    crs: #32617 # <------------ Set the CRS of the map
 
   # optional calibration applied to init odometry input
   init:
@@ -96,14 +96,27 @@ relocalization:
   # ROS specific
   ros:
     input_topic_pointcloud2: /converted/lidar #livox/lidar
-    input_topic_init_odometry: /odometry
+    input_topic_init_odometry: /odom
     output_namespace: /exwayz/reloc
-    output_topic_odometry: /odometry
     output_frameid: xyz_map
     map_frameid_parent: true
     publish_tf: true
     remote_start: false
     subscribe_queue_size: 10
+    output_odometry:
+      # [optional, default=/odometry] Output topic
+      topic: /odometry
+      # [optional, default=xyz_map] Odometry message header.frame_id
+      parent_frame_id: xyz_map
+      # [optional, default=""] Odometry message child_frame_id. If empty,
+      # input PointCloud2 frame id is used
+      child_frame_id: odom
+      # [optional, default=false] Optionally inverts output pose and
+      # frame_ids
+      invert: false
+      # [optional, default=false] Publish parent->child TF using the
+      # output Odometry
+      publish_tf: true
 
   # Checks to ensure relocalization sanity
   #--------------------------------------------------------------------------#
