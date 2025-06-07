@@ -104,6 +104,7 @@ def generate_launch_description():
             robot_state_publisher_launch,
             joint_state_publisher_node,
             pose_generator_node,
+            odom_to_tf2,
             reloc,
         ]
     )

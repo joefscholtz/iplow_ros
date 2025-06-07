@@ -10,7 +10,7 @@ using std::placeholders::_1;
 
 class OdomToTF : public rclcpp::Node {
 public:
-  OdomToTF() : Node("odom_to_tf") {
+  OdomToTF() : Node("odom_to_tf2") {
     std::string odom_topic;
     frame_id_ = this->declare_parameter("frame_id", std::string(""));
     child_frame_id_ =
