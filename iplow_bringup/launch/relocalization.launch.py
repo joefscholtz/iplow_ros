@@ -17,6 +17,7 @@ def generate_launch_description():
 
     use_sim_time = LaunchConfiguration("use_sim_time")
     publish_robot_state = LaunchConfiguration("publish_robot_state")
+    odom_to_tf2_config = LaunchConfiguration("odom_to_tf2_config")
     reloc_config = LaunchConfiguration("reloc_config")
     pose_generator_config = LaunchConfiguration("pose_generator_config")
 
@@ -34,6 +35,15 @@ def generate_launch_description():
         package="joint_state_publisher",
         executable="joint_state_publisher",
         parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
+    )
+
+    odom_to_tf2 = Node(
+        package="iplow_bringup",
+        executable="odom_to_tf2",
+        name="odom_to_tf",
+        output="screen",
+        parameters=[odom_to_tf2_config],
+        remappings=[],
     )
 
     livox_MID360 = IncludeLaunchDescription(
@@ -79,6 +89,11 @@ def generate_launch_description():
             DeclareLaunchArgument(
                 "reloc_config",
                 default_value=str(iplow_bringup / "config" / "relocalization.yaml"),
+                description="Exwayz relocalization config path",
+            ),
+            DeclareLaunchArgument(
+                "odom_to_tf2_configm",
+                default_value=str(iplow_bringup / "config" / "odom_to_tf2.yaml"),
                 description="Exwayz relocalization config path",
             ),
             DeclareLaunchArgument(

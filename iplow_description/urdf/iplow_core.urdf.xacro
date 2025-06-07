@@ -23,13 +23,13 @@
     <origin xyz="0 0 0.38" rpy="0 0 0"/> <!-- wheels touch the ground with z=0.3784-->
   </xacro:base>
 
-  <joint name="odom_joint" type="fixed">
-    <parent link="base"/>
-    <child link="odom"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-  </joint>
-
-  <link name="odom"/>
+  <!-- <joint name="odom_joint" type="fixed"> -->
+  <!--   <parent link="base"/> -->
+  <!--   <child link="odom"/> -->
+  <!--   <origin xyz="0 0 0" rpy="0 0 0"/> -->
+  <!-- </joint> -->
+  <!---->
+  <!-- <link name="odom"/> -->
 
   <xacro:left_wheel name="left_wheel" parent="base">
     <origin xyz="-0.3129 0.0 -0.2234" rpy="0 0 0"/> 
