@@ -92,7 +92,7 @@ def generate_launch_description():
                 description="Exwayz relocalization config path",
             ),
             DeclareLaunchArgument(
-                "odom_to_tf2_configm",
+                "odom_to_tf2_config",
                 default_value=str(iplow_bringup / "config" / "odom_to_tf2.yaml"),
                 description="Exwayz relocalization config path",
             ),
